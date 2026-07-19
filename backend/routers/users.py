@@ -6,6 +6,7 @@ from data.models.user import User
 from data.models.preference import UserPreference
 from schemas.user_schema import UserRegister, UserLogin, Token, UserResponse
 from utils.security import hash_password, verify_password, create_access_token
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -56,18 +57,26 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=Token)
-def login(login_data: UserLogin, db: Session = Depends(get_db)):
-    # Query database by username instead of email
-    user = db.query(User).filter(User.username == login_data.username).first()
-    
-    if not user or not verify_password(login_data.password, user.password_hash):
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    user = db.query(User).filter(User.username == form_data.username).first()
+
+    if not user or not verify_password(form_data.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
 
-    # Generate token with username
-    token_data = {"sub": str(user.id), "username": user.username}
+    token_data = {
+        "sub": str(user.id),
+        "username": user.username,
+    }
+
     token = create_access_token(token_data)
 
-    return {"access_token": token, "token_type": "bearer"}
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+    }
