@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
-
 const Register = () => {
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -17,13 +16,13 @@ const Register = () => {
     height_cm: "",
     activity_level: "none",
     goal: "health",
+    life_stage: "standard",
   });
 
   const [selectedPreferences, setSelectedPreferences] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Available preferences matched to database seed IDs
   const preferencesList = [
     { id: 1, name: "Vegetarian" },
     { id: 2, name: "Vegan" },
@@ -32,36 +31,48 @@ const Register = () => {
     { id: 5, name: "PCOS" },
   ];
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }));
   };
 
-  const handlePreferenceChange = (id) => {
-    if (selectedPreferences.includes(id)) {
-      setSelectedPreferences(selectedPreferences.filter((pId) => pId !== id));
-    } else {
-      setSelectedPreferences([...selectedPreferences, id]);
-    }
+  const handlePreferenceChange = (preferenceId) => {
+    setSelectedPreferences((previousPreferences) => {
+      if (previousPreferences.includes(preferenceId)) {
+        return previousPreferences.filter(
+          (id) => id !== preferenceId
+        );
+      }
+
+      return [...previousPreferences, preferenceId];
+    });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     setError("");
     setLoading(true);
 
     const payload = {
       ...formData,
-      weight_kg: parseFloat(formData.weight_kg),
-      height_cm: parseFloat(formData.height_cm),
+      weight_kg: Number(formData.weight_kg),
+      height_cm: Number(formData.height_cm),
       preference_ids: selectedPreferences,
     };
 
     try {
       await register(payload);
-      navigate("/login"); // Redirect to login page upon registration
+      navigate("/login");
     } catch (err) {
-      setError(err.response?.data?.detail || "Registration failed. Try again.");
+      setError(
+        err.response?.data?.detail ||
+          "Registration failed. Try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -71,16 +82,24 @@ const Register = () => {
     <div className="form-container">
       <div className="form-box register-box">
         <h2>Create Account</h2>
-        <p className="subtitle">Let's set up your personalized profile</p>
 
-        {error && <div className="error-message">{error}</div>}
+        <p className="subtitle">
+          Let's set up your personalized profile
+        </p>
+
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
-            {/* Personal Details */}
             <div className="input-group">
-              <label>Full Name</label>
+              <label htmlFor="full_name">Full Name</label>
+
               <input
+                id="full_name"
                 type="text"
                 name="full_name"
                 value={formData.full_name}
@@ -91,8 +110,10 @@ const Register = () => {
             </div>
 
             <div className="input-group">
-              <label>Username</label>
+              <label htmlFor="username">Username</label>
+
               <input
+                id="username"
                 type="text"
                 name="username"
                 value={formData.username}
@@ -103,8 +124,10 @@ const Register = () => {
             </div>
 
             <div className="input-group">
-              <label>Email Address</label>
+              <label htmlFor="email">Email Address</label>
+
               <input
+                id="email"
                 type="email"
                 name="email"
                 value={formData.email}
@@ -115,20 +138,27 @@ const Register = () => {
             </div>
 
             <div className="input-group">
-              <label>Password</label>
+              <label htmlFor="password">Password</label>
+
               <input
+                id="password"
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="Min 6 characters"
+                minLength={6}
                 required
               />
             </div>
 
             <div className="input-group">
-              <label>Date of Birth</label>
+              <label htmlFor="date_of_birth">
+                Date of Birth
+              </label>
+
               <input
+                id="date_of_birth"
                 type="date"
                 name="date_of_birth"
                 value={formData.date_of_birth}
@@ -137,87 +167,167 @@ const Register = () => {
               />
             </div>
 
-            {/* Metrics */}
             <div className="input-group">
-              <label>Weight (kg)</label>
+              <label htmlFor="weight_kg">
+                Weight (kg)
+              </label>
+
               <input
+                id="weight_kg"
                 type="number"
-                step="0.1"
                 name="weight_kg"
                 value={formData.weight_kg}
                 onChange={handleInputChange}
                 placeholder="e.g. 62.5"
+                min="30"
+                max="300"
+                step="0.1"
                 required
               />
             </div>
 
             <div className="input-group">
-              <label>Height (cm)</label>
+              <label htmlFor="height_cm">
+                Height (cm)
+              </label>
+
               <input
+                id="height_cm"
                 type="number"
-                step="0.1"
                 name="height_cm"
                 value={formData.height_cm}
                 onChange={handleInputChange}
                 placeholder="e.g. 165"
+                min="100"
+                max="250"
+                step="0.1"
                 required
               />
             </div>
 
-            {/* Select Options */}
             <div className="input-group">
-              <label>Activity Level</label>
+              <label htmlFor="activity_level">
+                Activity Level
+              </label>
+
               <select
+                id="activity_level"
                 name="activity_level"
                 value={formData.activity_level}
                 onChange={handleInputChange}
               >
-                <option value="none">Sedentary (No training)</option>
-                <option value="light">Light Activity</option>
-                <option value="moderate">Moderate Activity</option>
-                <option value="high">High Activity</option>
+                <option value="none">
+                  Sedentary (No training)
+                </option>
+
+                <option value="light">
+                  Light Activity
+                </option>
+
+                <option value="moderate">
+                  Moderate Activity
+                </option>
+
+                <option value="high">
+                  High Activity
+                </option>
               </select>
             </div>
 
             <div className="input-group">
-              <label>Your Goal</label>
+              <label htmlFor="goal">Your Goal</label>
+
               <select
+                id="goal"
                 name="goal"
                 value={formData.goal}
                 onChange={handleInputChange}
               >
-                <option value="health">Overall Health</option>
-                <option value="maintain">Maintain Weight</option>
-                <option value="cut">Cut (Weight Loss)</option>
-                <option value="bulk">Bulk (Muscle Gain)</option>
+                <option value="health">
+                  Overall Health
+                </option>
+
+                <option value="maintain">
+                  Maintain Weight
+                </option>
+
+                <option value="cut">
+                  Cut (Weight Loss)
+                </option>
+
+                <option value="bulk">
+                  Bulk (Muscle Gain)
+                </option>
+              </select>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="life_stage">
+                Life Stage
+              </label>
+
+              <select
+                id="life_stage"
+                name="life_stage"
+                value={formData.life_stage}
+                onChange={handleInputChange}
+              >
+                <option value="standard">
+                  Standard
+                </option>
+
+                <option value="pregnancy">
+                  Pregnancy
+                </option>
+
+                <option value="breastfeeding">
+                  Breastfeeding
+                </option>
               </select>
             </div>
           </div>
 
-          {/* Diet Preferences Checkboxes */}
           <div className="preferences-section">
-            <label className="section-label">Dietary & Health Preferences</label>
+            <span className="section-label">
+              Dietary & Health Preferences
+            </span>
+
             <div className="preferences-grid">
-              {preferencesList.map((pref) => (
-                <label key={pref.id} className="preference-checkbox">
+              {preferencesList.map((preference) => (
+                <label
+                  key={preference.id}
+                  className="preference-checkbox"
+                >
                   <input
                     type="checkbox"
-                    checked={selectedPreferences.includes(pref.id)}
-                    onChange={() => handlePreferenceChange(pref.id)}
+                    checked={selectedPreferences.includes(
+                      preference.id
+                    )}
+                    onChange={() =>
+                      handlePreferenceChange(preference.id)
+                    }
                   />
-                  <span>{pref.name}</span>
+
+                  <span>{preference.name}</span>
                 </label>
               ))}
             </div>
           </div>
 
-          <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? "Creating Account..." : "Register"}
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={loading}
+          >
+            {loading
+              ? "Creating Account..."
+              : "Register"}
           </button>
         </form>
 
         <p className="redirect-text">
-          Already have an account? <Link to="/login">Sign In</Link>
+          Already have an account?{" "}
+          <Link to="/login">Sign In</Link>
         </p>
       </div>
     </div>

@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.users import router as users_router
 from routers.foods import router as foods_router
+from routers.target import router as target_router
+import uvicorn
 
 app = FastAPI(title="NutriShe API")
 
@@ -17,6 +19,8 @@ app.add_middleware(
 
 app.include_router(users_router)
 app.include_router(foods_router)
+app.include_router(target_router)
+
 
 
 @app.get("/")
