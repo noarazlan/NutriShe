@@ -5,12 +5,8 @@ from data.database import get_db
 from data.models.user import User
 from data.models.preference import UserPreference
 from schemas.user_schema import UserRegister, UserLogin, Token, UserResponse
-<<<<<<< HEAD
 from utils.security import hash_password, verify_password, create_access_token
 from fastapi.security import OAuth2PasswordRequestForm
-=======
-from utils.security import hash_password, verify_password, create_access_token, get_current_user
->>>>>>> 47f79394928182182919ea49e8b0ffbc99c7ba04
 
 router = APIRouter(prefix="/users", tags=["users"])
 
