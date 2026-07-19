@@ -8,6 +8,7 @@ from data.models.user import User
 from data.models.reference import NutrientReferenceValue
 from schemas.food_schema import FoodResponse
 from utils.security import get_current_user
+from datetime import date
 
 router = APIRouter(prefix="/foods", tags=["foods"])
 

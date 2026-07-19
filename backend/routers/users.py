@@ -8,6 +8,7 @@ from data.models.preference import UserPreference
 from schemas.user_schema import UserRegister, Token, UserResponse
 from utils.security import hash_password, verify_password, create_access_token
 
+
 router = APIRouter(prefix="/users", tags=["users"])
 
 
@@ -79,8 +80,4 @@ def login(
     return {
         "access_token": token,
         "token_type": "bearer",
-<<<<<<< HEAD
     }
-=======
-    }
->>>>>>> 53322fce5bbe3d2bbde82208510e7006cd7895cb
