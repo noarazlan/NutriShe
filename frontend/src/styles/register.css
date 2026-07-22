@@ -3,31 +3,35 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, #fff5f7 0%, #fed7e2 100%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 40px 20px;
   box-sizing: border-box;
 }
 
 .form-box {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(213, 63, 140, 0.1);
+  border: 1px solid #fbb6ce;
   width: 100%;
-  max-width: 500px; /* Slightly wider to accommodate side-by-side inputs nicely */
+  max-width: 500px;
   box-sizing: border-box;
 }
 
 .form-box h2 {
   margin: 0 0 10px 0;
-  color: #1a202c;
+  color: #702459;
   font-size: 2rem;
   text-align: center;
+  font-weight: 700;
 }
 
 .subtitle {
-  color: #718096;
+  color: #9b2c2c;
+  opacity: 0.8;
   text-align: center;
   margin-top: 0;
   margin-bottom: 30px;
@@ -38,7 +42,7 @@
   background-color: #fff5f5;
   color: #e53e3e;
   padding: 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #fed7d7;
   margin-bottom: 20px;
   font-size: 0.9rem;
@@ -53,7 +57,7 @@
 
 .input-group label {
   margin-bottom: 8px;
-  color: #4a5568;
+  color: #702459;
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -62,7 +66,7 @@
 .input-group select {
   padding: 12px 16px;
   font-size: 0.95rem;
-  border: 1px solid #cbd5e0;
+  border: 1px solid #fbb6ce;
   border-radius: 8px;
   outline: none;
   background-color: #ffffff;
@@ -74,11 +78,10 @@
 
 .input-group input:focus,
 .input-group select:focus {
-  border-color: #319795;
-  box-shadow: 0 0 0 3px rgba(49, 151, 149, 0.15);
+  border-color: #d53f8c;
+  box-shadow: 0 0 0 3px rgba(213, 63, 140, 0.2);
 }
 
-/* Layout for splitting inputs into columns (like Weight and Height) */
 .form-row {
   display: flex;
   gap: 15px;
@@ -88,14 +91,13 @@
   flex: 1;
 }
 
-/* Preferences / Allergies Checkboxes Selection Grid */
 .preferences-section {
   margin-bottom: 20px;
 }
 
 .preferences-section label.section-title {
   margin-bottom: 10px;
-  color: #4a5568;
+  color: #702459;
   font-size: 0.9rem;
   font-weight: 600;
   display: block;
@@ -105,10 +107,10 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  background-color: #f7fafc;
+  background-color: #fff5f7;
   padding: 15px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  border: 1px solid #fbb6ce;
 }
 
 .checkbox-label {
@@ -125,12 +127,13 @@
   width: auto;
   margin: 0;
   cursor: pointer;
+  accent-color: #d53f8c;
 }
 
 .submit-btn {
   width: 100%;
   padding: 14px;
-  background-color: #319795;
+  background-color: #d53f8c;
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -142,7 +145,7 @@
 }
 
 .submit-btn:hover {
-  background-color: #2c7a7b;
+  background-color: #b83280;
 }
 
 .submit-btn:active {
@@ -150,7 +153,8 @@
 }
 
 .submit-btn:disabled {
-  background-color: #a0aec0;
+  background-color: #fed7e2;
+  color: #b83280;
   cursor: not-allowed;
 }
 
@@ -163,13 +167,13 @@
 }
 
 .redirect-text a {
-  color: #319795;
+  color: #d53f8c;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s;
 }
 
 .redirect-text a:hover {
-  color: #2c7a7b;
+  color: #b83280;
   text-decoration: underline;
 }

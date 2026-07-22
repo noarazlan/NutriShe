@@ -1,82 +1,146 @@
-import React, {useState, useEffect} from "react";
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
+import "../styles/home.css"; // Importing the new design styles
 
-const HomePage = () =>{
-    const [data, setData] = useState(null)
-    const [error , setError] = useState(null)
-    const [showMicronutrients, setShowMicronutrients] = useState(false);
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem("token");
+const HomePage = () => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [showMicronutrients, setShowMicronutrients] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-                const response = await axios.get("http://localhost:8000/target/me",
-                {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-                setData(response.data);
-            } catch (error) {
-                console.log("Error:", error);
+        const response = await axios.get("http://localhost:8000/target/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-                setError(error.response?.data?.detail || "Could not load your nutrition targets");
-            } finally {
-                setLoading(false);
-            }
-        };
+        setData(response.data);
+      } catch (error) {
+        console.log("Error:", error);
+        setError(
+          error.response?.data?.detail || "Could not load your nutrition targets"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        fetchData();
-    }, []);
+    fetchData();
+  }, []);
 
-        if (loading) {
-            return <div>Loading...</div>;
-        }
+  if (loading) {
+    return <div className="loading-box">Loading your personalized dashboard...</div>;
+  }
 
-        if (error) {
-            return <div>{error}</div>;
-        }
+  if (error) {
+    return <div className="error-box">{error}</div>;
+  }
 
-        if (!data) {
-            return <div>No target data was found.</div>;
-        }
+  if (!data) {
+    return <div className="error-box">No target data was found.</div>;
+  }
 
-        
-         return (
-            <div>
-                <h1>Hello {data.full_name}, welcome to your fitness journey</h1>
-                <h2>Here are your goals for today</h2>
-                <Link to = "/protein">Protein <br /> {data.protein} g</Link><br/>
-                <Link to = "/fats">Fats <br /> {data.fat} g</Link><br/>
-                <Link to = "/carbohydrates">Carbohydrates <br /> {data.carbohydrates} g</Link><br/>
-                <Link to = "/fiber">Fiber <br /> {data.fiber} g</Link><br/>
-                <section>
-                    <button onClick={() => setShowMicronutrients((prev) => !prev)}
-                     aria-expanded={showMicronutrients}> 
-                     {showMicronutrients? "▲ Hide vitamins & minerals": "▼ View vitamins & minerals"  }</button>
+  return (
+    <div className="home-container">
+      {/* Header section */}
+      <header className="home-header">
+        <h1>Hello {data.full_name || "User"},</h1>
+            <h1> welcome to your fitness journey</h1>
+        <h2>Here are your goals for today</h2>
+      </header>
 
-                     {showMicronutrients && (<div>
-                        <p>Iron : {data.iron} mg</p>
-                        <p>Calcium : {data.calcium} mg </p>
-                        <p>Magnesium : {data.magnesium} mg</p>
-                        <p>Potassium : {data.potassium} mg </p>
-                        <p>Sodium : {data.sodium} mg</p>
-                        <p>Vitamin A : {data.vitamin_a} mcg</p>
-                        <p>Vitamin C : {data.vitamin_c} mg</p>
-                        <p>Vitamin D : {data.vitamin_d} mcg</p>
-                        <p>Vitamin B12 : {data.vitamin_b12} mcg</p>
-                     </div>)}
-                </section>
-                
-                
+      {/* Macronutrient Cards Navigation */}
+      <div className="macro-grid">
+        <Link to="/protein" className="macro-card">
+          <span className="macro-title">Protein</span>
+          <span className="macro-value">
+            {data.protein_target_g ?? data.protein ?? 0} <span className="macro-unit">g</span>
+          </span>
+        </Link>
+
+        <Link to="/fats" className="macro-card">
+          <span className="macro-title">Fats</span>
+          <span className="macro-value">
+            {data.fat_target_g ?? data.fat ?? 0} <span className="macro-unit">g</span>
+          </span>
+        </Link>
+
+        <Link to="/carbohydrates" className="macro-card">
+          <span className="macro-title">Carbohydrates</span>
+          <span className="macro-value">
+            {data.carbohydrates_target_g ?? data.carbohydrates ?? 0} <span className="macro-unit">g</span>
+          </span>
+        </Link>
+
+        <Link to="/fiber" className="macro-card">
+          <span className="macro-title">Fiber</span>
+          <span className="macro-value">
+            {data.fiber_target_g ?? data.fiber ?? 0} <span className="macro-unit">g</span>
+          </span>
+        </Link>
+      </div>
+
+      {/* Micronutrients Section */}
+      <section className="micro-section">
+        <button
+          className="toggle-micro-btn"
+          onClick={() => setShowMicronutrients((prev) => !prev)}
+          aria-expanded={showMicronutrients}
+        >
+          {showMicronutrients
+            ? "▲ Hide vitamins & minerals"
+            : "▼ View vitamins & minerals"}
+        </button>
+
+        {showMicronutrients && (
+          <div className="micro-grid">
+            <div className="micro-item">
+              <span className="micro-name">Iron</span>
+              <span className="micro-value">{data.iron_target_mg ?? data.iron ?? 0} mg</span>
             </div>
-            )
-        }
+            <div className="micro-item">
+              <span className="micro-name">Calcium</span>
+              <span className="micro-value">{data.calcium_target_mg ?? data.calcium ?? 0} mg</span>
+            </div>
+            <div className="micro-item">
+              <span className="micro-name">Magnesium</span>
+              <span className="micro-value">{data.magnesium_target_mg ?? data.magnesium ?? 0} mg</span>
+            </div>
+            <div className="micro-item">
+              <span className="micro-name">Potassium</span>
+              <span className="micro-value">{data.potassium_target_mg ?? data.potassium ?? 0} mg</span>
+            </div>
+            <div className="micro-item">
+              <span className="micro-name">Sodium</span>
+              <span className="micro-value">{data.sodium_target_mg ?? data.sodium ?? 0} mg</span>
+            </div>
+            <div className="micro-item">
+              <span className="micro-name">Vitamin A</span>
+              <span className="micro-value">{data.vitamin_a_target_mcg ?? data.vitamin_a ?? 0} mcg</span>
+            </div>
+            <div className="micro-item">
+              <span className="micro-name">Vitamin C</span>
+              <span className="micro-value">{data.vitamin_c_target_mg ?? data.vitamin_c ?? 0} mg</span>
+            </div>
+            <div className="micro-item">
+              <span className="micro-name">Vitamin D</span>
+              <span className="micro-value">{data.vitamin_d_target_mcg ?? data.vitamin_d ?? 0} mcg</span>
+            </div>
+            <div className="micro-item">
+              <span className="micro-name">Vitamin B12</span>
+              <span className="micro-value">{data.vitamin_b12_target_mcg ?? data.vitamin_b12 ?? 0} mcg</span>
+            </div>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+};
 
-        
-        
-export default HomePage
+export default HomePage;
