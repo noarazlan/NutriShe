@@ -7,6 +7,7 @@ from data.models.user import User
 from data.models.preference import UserPreference
 from schemas.user_schema import UserRegister, Token, UserResponse
 from utils.security import hash_password, verify_password, create_access_token
+from services.target_service import calculate_and_save_targets
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -41,6 +42,7 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
         height_cm=user_data.height_cm,
         activity_level=user_data.activity_level,
         goal=user_data.goal,
+        life_stage=user_data.life_stage,
     )
     
     db.add(new_user)
@@ -50,6 +52,8 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
     for pref_id in user_data.preference_ids:
         user_pref = UserPreference(user_id=new_user.id, preference_id=pref_id)
         db.add(user_pref)
+    
+    calculate_and_save_targets(user=new_user, db=db)
 
     db.commit()
     db.refresh(new_user)

@@ -65,14 +65,34 @@ const Register = () => {
       preference_ids: selectedPreferences,
     };
 
+    console.log("Registration payload:", payload);
+
     try {
       await register(payload);
+
       navigate("/login");
     } catch (err) {
-      setError(
-        err.response?.data?.detail ||
-          "Registration failed. Try again."
-      );
+      console.log("Full registration error:", err);
+      console.log("Error response:", err.response);
+      console.log("Backend status:", err.response?.status);
+      console.log("Backend data:", err.response?.data);
+
+      const detail = err.response?.data?.detail;
+
+      if (Array.isArray(detail)) {
+        const errorMessages = detail.map((item) => {
+          const fieldName = item.loc?.at(-1) || "field";
+          return `${fieldName}: ${item.msg}`;
+        });
+
+        setError(errorMessages.join(", "));
+      } else if (typeof detail === "string") {
+        setError(detail);
+      } else if (err.message) {
+        setError(err.message);
+      } else {
+        setError("Registration failed. Try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -96,7 +116,9 @@ const Register = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
             <div className="input-group">
-              <label htmlFor="full_name">Full Name</label>
+              <label htmlFor="full_name">
+                Full Name
+              </label>
 
               <input
                 id="full_name"
@@ -110,7 +132,9 @@ const Register = () => {
             </div>
 
             <div className="input-group">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="username">
+                Username
+              </label>
 
               <input
                 id="username"
@@ -124,7 +148,9 @@ const Register = () => {
             </div>
 
             <div className="input-group">
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="email">
+                Email Address
+              </label>
 
               <input
                 id="email"
@@ -138,7 +164,9 @@ const Register = () => {
             </div>
 
             <div className="input-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">
+                Password
+              </label>
 
               <input
                 id="password"
@@ -235,7 +263,9 @@ const Register = () => {
             </div>
 
             <div className="input-group">
-              <label htmlFor="goal">Your Goal</label>
+              <label htmlFor="goal">
+                Your Goal
+              </label>
 
               <select
                 id="goal"
@@ -327,7 +357,9 @@ const Register = () => {
 
         <p className="redirect-text">
           Already have an account?{" "}
-          <Link to="/login">Sign In</Link>
+          <Link to="/login">
+            Sign In
+          </Link>
         </p>
       </div>
     </div>

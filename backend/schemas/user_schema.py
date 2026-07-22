@@ -1,7 +1,7 @@
 from datetime import date
 from decimal import Decimal
 from pydantic import BaseModel, EmailStr
-from data.models.enums import ActivityLevel, UserGoal
+from data.models.enums import ActivityLevel, UserGoal, LifeStage
 
 
 class UserRegister(BaseModel):
@@ -14,7 +14,8 @@ class UserRegister(BaseModel):
     height_cm: Decimal
     activity_level: ActivityLevel
     goal: UserGoal
-    preference_ids: list[int] = []  
+    preference_ids: list[int] = [] 
+    life_stage: LifeStage = LifeStage.STANDARD 
 
 
 class UserLogin(BaseModel):

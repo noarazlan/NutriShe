@@ -64,9 +64,6 @@ def calculate_and_save_targets(user : User , db : Session):
                 reference.recommended_amount,
             )
 
-    db.commit()
-    db.refresh(user_target)
-
     return user_target
 
     

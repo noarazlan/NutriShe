@@ -19,6 +19,7 @@ from data.models.enums import (
     ActivityLevel,
     TargetMode,
     UserGoal,
+    LifeStage,
 )
 
 
@@ -140,3 +141,16 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+
+    life_stage: Mapped[LifeStage] = mapped_column(
+        Enum(
+            LifeStage,
+            name="life_stage_enum",
+            values_callable=lambda enum_class: [
+                item.value for item in enum_class
+            ],
+        ),
+        default=LifeStage.STANDARD,
+        nullable=False,
+    )
+    

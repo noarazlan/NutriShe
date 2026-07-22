@@ -10,22 +10,9 @@ import Protein from "./pages/Protein";
 import Fiber from "./pages/Fiber";
 import Fats from "./pages/Fats";
 import Carbohydrates from "./pages/Carbohydrates";
+import HomePage from "./pages/Home";
 
-// Temporary Home Component
-const TempHome = () => {
-  return (
-    <div style={{ padding: "40px", textAlign: "center", fontFamily: "sans-serif" }}>
-      <h1>🎉 NutriShe Dashboard</h1>
-      <p>Welcome! Navigation paths are active. Navigate manually or click below:</p>
-      <div style={{ marginTop: "20px", display: "flex", justifyContent: "center", gap: "10px" }}>
-        <a href="/protein">Protein</a> | 
-        <a href="/fiber">Fiber</a> | 
-        <a href="/fats">Fats</a> | 
-        <a href="/carbohydrates">Carbohydrates</a>
-      </div>
-    </div>
-  );
-};
+
 
 // Modern routing setup matching your createBrowserRouter preference
 const router = createBrowserRouter([
@@ -41,7 +28,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <ProtectedRoute>
-        <TempHome />
+        <HomePage />
       </ProtectedRoute>
     ),
   },

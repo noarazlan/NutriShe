@@ -12,6 +12,17 @@ SOURCE_URL = (
 
 
 REFERENCE_VALUES = [
+    # Women aged 14–18
+    ("fiber", "Fiber", "g", 14, 18, 26, None, ReferenceType.AI),
+    ("iron", "Iron", "mg", 14, 18, 15, 45, ReferenceType.RDA),
+    ("calcium", "Calcium", "mg", 14, 18, 1300, 3000, ReferenceType.RDA),
+    ("magnesium", "Magnesium", "mg", 14, 18, 360, 350, ReferenceType.RDA),
+    ("potassium", "Potassium", "mg", 14, 18, 2300, None, ReferenceType.AI),
+    ("sodium", "Sodium", "mg", 14, 18, 1500, 2300, ReferenceType.AI),
+    ("vitamin_a", "Vitamin A", "mcg", 14, 18, 700, 2800, ReferenceType.RDA),
+    ("vitamin_c", "Vitamin C", "mg", 14, 18, 65, 1800, ReferenceType.RDA),
+    ("vitamin_d", "Vitamin D", "mcg", 14, 18, 15, 100, ReferenceType.RDA),
+    ("vitamin_b12", "Vitamin B12", "mcg", 14, 18, 2.4, None, ReferenceType.RDA),
     # Women aged 19–30
     ("fiber", "Fiber", "g", 19, 30, 25, None, ReferenceType.AI),
     ("iron", "Iron", "mg", 19, 30, 18, 45, ReferenceType.RDA),
