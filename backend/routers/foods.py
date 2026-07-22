@@ -22,7 +22,7 @@ def get_foods_by_category(
     """
     Fetch and automatically filter foods based on the current user's diet preferences.
     """
-    # 1. Fetch all foods belonging to this category
+    # Fetch all foods belonging to this category
     all_foods = (
         db.query(Food)
         .join(FoodCategory)
@@ -30,7 +30,7 @@ def get_foods_by_category(
         .all()
     )
 
-    # 2. Get the preference codes of the current user
+    # Get the preference codes of the current user
     user_pref_codes = [up.preference.code for up in current_user.preferences]
 
     filtered_foods = []

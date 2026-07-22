@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axiosClient from "../api/Client";
 import { Link } from "react-router-dom";
+import axiosClient from "../api/Client";
+import "../styles/nutrient-page.css";
 
 const NutrientPage = ({ title, description, categoryKey, unit }) => {
   const [foods, setFoods] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search input
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [totalNutrient, setTotalNutrient] = useState(0);
   const [dailyReferenceValue, setDailyReferenceValue] = useState(0);
@@ -45,7 +47,7 @@ const NutrientPage = ({ title, description, categoryKey, unit }) => {
     const nutrientValue = (Number(food[nutrientField]) * grams) / 100;
 
     const newListItem = {
-      id: Date.now(), // Unique ID to avoid duplicate removal issues
+      id: Date.now(),
       name: food.name,
       grams,
       calculatedValue: nutrientValue,
@@ -66,7 +68,7 @@ const NutrientPage = ({ title, description, categoryKey, unit }) => {
   };
 
   const handleDragOver = (e) => {
-    e.preventDefault(); // Required to allow dropping
+    e.preventDefault();
   };
 
   const handleDrop = (e) => {
@@ -83,6 +85,11 @@ const NutrientPage = ({ title, description, categoryKey, unit }) => {
     }
   };
 
+  // Filter foods locally in real-time based on the search term (case-insensitive)
+  const filteredFoods = foods.filter((food) =>
+    food.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   // Calculate percentage of daily target completed
   const completionPercentage = dailyReferenceValue > 0 
     ? Math.min((totalNutrient / dailyReferenceValue) * 100, 100) 
@@ -91,13 +98,12 @@ const NutrientPage = ({ title, description, categoryKey, unit }) => {
   return (
     <div className="nutrient-container">
       <header className="nutrient-header">
-        {/* Back to Home Button */}
         <div className="navigation-wrapper">
           <Link to="/" className="back-home-btn">
             ← Back to Dashboard
           </Link>
         </div>
-        
+
         <h1>{title}</h1>
         <p className="nutrient-description">{description}</p>
         
@@ -121,47 +127,64 @@ const NutrientPage = ({ title, description, categoryKey, unit }) => {
         {/* Food Pool Selection */}
         <div className="foods-pool">
           <h3>Food Database</h3>
+          
+          {/* Real-time Search Input Box */}
+          <div className="search-wrapper">
+            <input
+              type="text"
+              placeholder="🔍 Search food items..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="food-search-input"
+            />
+          </div>
+
           <p className="helper-text">Drag any card or enter grams and click 'Add'</p>
+          
           <div className="foods-grid">
-            {foods.map((food) => {
-              const fieldName = `${categoryKey}_per_100g`;
-              const currentInput = customGrams[food.id] || "100";
-              
-              return (
-                <div 
-                  key={food.id} 
-                  className="food-card draggable"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, food)}
-                >
-                  <div className="food-card-info">
-                    <h4>{food.name}</h4>
-                    <p className="nutrient-value">
-                      {Number(food[fieldName]).toFixed(1)}{unit} <span className="light-text">/ 100g</span>
-                    </p>
-                  </div>
-                  
-                  <div className="food-card-actions">
-                    <div className="gram-input-wrapper">
-                      <input
-                        type="number"
-                        min="1"
-                        value={currentInput}
-                        onChange={(e) => handleGramChange(food.id, e.target.value)}
-                        className="grams-input"
-                      />
-                      <span className="grams-label">g</span>
+            {filteredFoods.length === 0 ? (
+              <p className="no-results-text">No matching foods found.</p>
+            ) : (
+              filteredFoods.map((food) => {
+                const fieldName = `${categoryKey}_per_100g`;
+                const currentInput = customGrams[food.id] || "100";
+                
+                return (
+                  <div 
+                    key={food.id} 
+                    className="food-card draggable"
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, food)}
+                  >
+                    <div className="food-card-info">
+                      <h4>{food.name}</h4>
+                      <p className="nutrient-value">
+                        {Number(food[fieldName]).toFixed(1)}{unit} <span className="light-text">/ 100g</span>
+                      </p>
                     </div>
-                    <button 
-                      className="add-to-plate-btn"
-                      onClick={() => addFoodToPlate(food, currentInput)}
-                    >
-                      Add
-                    </button>
+                    
+                    <div className="food-card-actions">
+                      <div className="gram-input-wrapper">
+                        <input
+                          type="number"
+                          min="1"
+                          value={currentInput}
+                          onChange={(e) => handleGramChange(food.id, e.target.value)}
+                          className="grams-input"
+                        />
+                        <span className="grams-label">g</span>
+                      </div>
+                      <button 
+                        className="add-to-plate-btn"
+                        onClick={() => addFoodToPlate(food, currentInput)}
+                      >
+                        Add
+                      </button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
 

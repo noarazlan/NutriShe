@@ -14,7 +14,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/register", response_model=UserResponse)
 def register(user_data: UserRegister, db: Session = Depends(get_db)):
-    # 1. Check if the email already exists
+    # Check if the email already exists
     existing_email = db.query(User).filter(User.email == user_data.email).first()
     if existing_email:
         raise HTTPException(
@@ -22,7 +22,7 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
             detail="Email already registered",
         )
 
-    # 2. Check if the username is already taken
+    # Check if the username is already taken
     existing_username = db.query(User).filter(User.username == user_data.username).first()
     if existing_username:
         raise HTTPException(
@@ -30,7 +30,7 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
             detail="Username already taken",
         )
 
-    # 3. Hash password and create the new user
+    # Hash password and create the new user
     hashed_pw = hash_password(user_data.password)
     new_user = User(
         full_name=user_data.full_name,
@@ -48,7 +48,7 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
     db.add(new_user)
     db.flush()  # Generate user ID for preference mapping
 
-    # 4. Save diet and health preferences from onboarding
+    # Save diet and health preferences from onboarding
     for pref_id in user_data.preference_ids:
         user_pref = UserPreference(user_id=new_user.id, preference_id=pref_id)
         db.add(user_pref)

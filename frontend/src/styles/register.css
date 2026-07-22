@@ -1,0 +1,175 @@
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.form-box {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 500px; /* Slightly wider to accommodate side-by-side inputs nicely */
+  box-sizing: border-box;
+}
+
+.form-box h2 {
+  margin: 0 0 10px 0;
+  color: #1a202c;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.subtitle {
+  color: #718096;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+}
+
+.error-message {
+  background-color: #fff5f5;
+  color: #e53e3e;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #fed7d7;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 8px;
+  color: #4a5568;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.input-group input,
+.input-group select {
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  outline: none;
+  background-color: #ffffff;
+  color: #2d3748;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #319795;
+  box-shadow: 0 0 0 3px rgba(49, 151, 149, 0.15);
+}
+
+/* Layout for splitting inputs into columns (like Weight and Height) */
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .input-group {
+  flex: 1;
+}
+
+/* Preferences / Allergies Checkboxes Selection Grid */
+.preferences-section {
+  margin-bottom: 20px;
+}
+
+.preferences-section label.section-title {
+  margin-bottom: 10px;
+  color: #4a5568;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: block;
+}
+
+.preferences-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  background-color: #f7fafc;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: #4a5568;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  cursor: pointer;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #319795;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background-color: #2c7a7b;
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+.submit-btn:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.redirect-text {
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 0;
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.redirect-text a {
+  color: #319795;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.redirect-text a:hover {
+  color: #2c7a7b;
+  text-decoration: underline;
+}
