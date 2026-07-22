@@ -5,6 +5,7 @@ from datetime import datetime
 from sqlalchemy import (
     Boolean,
     DateTime,
+    Enum,
     ForeignKey,
     String,
     Text,
@@ -13,6 +14,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from data.base import Base
+from data.models.enums import MealType
 
 
 class Recipe(Base):
@@ -82,6 +84,12 @@ class Recipe(Base):
         cascade="all, delete-orphan",
     )
 
+    meal_types: Mapped[list["RecipeMealType"]] = relationship(
+        "RecipeMealType",
+        back_populates="recipe",
+        cascade="all, delete-orphan",
+    )
+
 
 class RecipePreference(Base):
     __tablename__ = "recipe_preferences"
@@ -113,16 +121,9 @@ class RecipePreference(Base):
     )
 
 
-class FavoriteRecipe(Base):
-    __tablename__ = "favorite_recipes"
 
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey(
-            "users.id",
-            ondelete="CASCADE",
-        ),
-        primary_key=True,
-    )
+class RecipeMealType(Base):
+    __tablename__ = "recipe_meal_types"
 
     recipe_id: Mapped[int] = mapped_column(
         ForeignKey(
@@ -132,18 +133,18 @@ class FavoriteRecipe(Base):
         primary_key=True,
     )
 
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
-
-    user: Mapped["User"] = relationship(
-        "User",
-        back_populates="favorite_recipes",
+    meal_type: Mapped[MealType] = mapped_column(
+        Enum(
+            MealType,
+            name="meal_type_enum",
+            values_callable=lambda enum_class: [
+                item.value for item in enum_class
+            ],
+        ),
+        primary_key=True,
     )
 
     recipe: Mapped["Recipe"] = relationship(
         "Recipe",
-        back_populates="favorited_by",
+        back_populates="meal_types",
     )

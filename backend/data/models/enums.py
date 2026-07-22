@@ -62,3 +62,10 @@ class TipType(str, enum.Enum):
     CARBOHYDRATES = "carbohydrates"
     FAT = "fat"
     FIBER = "fiber"
+
+
+class MealType(str, enum.Enum):
+    BREAKFAST = "breakfast"
+    LUNCH = "lunch"
+    DINNER = "dinner"
+    SNACK = "snack"

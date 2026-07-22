@@ -1,7 +1,14 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
+
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MainLayout from "./layouts/MainLayout";
+
 
 // Importing Pages
 import Login from "./pages/Login";
@@ -11,10 +18,9 @@ import Fiber from "./pages/Fiber";
 import Fats from "./pages/Fats";
 import Carbohydrates from "./pages/Carbohydrates";
 import HomePage from "./pages/Home";
+import RecipesPage from "./pages/Recipes";
+import RecipeDetailsPage from "./pages/RecipeDetails";
 
-
-
-// Modern routing setup matching your createBrowserRouter preference
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -24,46 +30,46 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   },
+
   {
-    path: "/",
     element: (
       <ProtectedRoute>
-        <HomePage />
+        <MainLayout />
       </ProtectedRoute>
     ),
+
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/protein",
+        element: <Protein />,
+      },
+      {
+        path: "/fiber",
+        element: <Fiber />,
+      },
+      {
+        path: "/fats",
+        element: <Fats />,
+      },
+      {
+        path: "/carbohydrates",
+        element: <Carbohydrates />,
+      },
+      {
+        path: "/recipes",
+        element: <RecipesPage />,
+      },
+      {
+         path: "/recipes/:id",
+        element: <RecipeDetailsPage />,
+      },
+    ],
   },
-  {
-    path: "/protein",
-    element: (
-      <ProtectedRoute>
-        <Protein />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/fiber",
-    element: (
-      <ProtectedRoute>
-        <Fiber />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/fats",
-    element: (
-      <ProtectedRoute>
-        <Fats />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/carbohydrates",
-    element: (
-      <ProtectedRoute>
-        <Carbohydrates />
-      </ProtectedRoute>
-    ),
-  },
+
   {
     path: "*",
     element: <Navigate to="/" replace />,

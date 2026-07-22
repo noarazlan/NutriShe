@@ -3,15 +3,19 @@ from data.models.food import (
     FoodCategory,
     FoodPreference,
 )
+
 from data.models.preference import (
     Preference,
     UserPreference,
 )
+
 from data.models.recipe import (
-    FavoriteRecipe,
     Recipe,
     RecipePreference,
+    RecipeMealType,
 )
+
+from data.models.favorite_recipe import FavoriteRecipe
 from data.models.reference import NutrientReferenceValue
 from data.models.target import UserTarget
 from data.models.tip import Tip, TipPreference
@@ -29,6 +33,7 @@ __all__ = [
     "NutrientReferenceValue",
     "Recipe",
     "RecipePreference",
+    "RecipeMealType",
     "FavoriteRecipe",
     "Tip",
     "TipPreference",

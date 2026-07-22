@@ -142,6 +142,7 @@ class User(Base):
         cascade="all, delete-orphan",
     )
 
+
     life_stage: Mapped[LifeStage] = mapped_column(
         Enum(
             LifeStage,

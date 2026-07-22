@@ -1,30 +1,41 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "../styles/home.css"; // Importing the new design styles
+import "../styles/home.css"; 
+import RecipeCard from "../components/RecipeCard";
 
 const HomePage = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const [recipes, setRecipes] = useState([]);
   const [showMicronutrients, setShowMicronutrients] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) {
+            setError("You must log in first");
+            return;}
 
-        const response = await axios.get("http://localhost:8000/target/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const headers = {Authorization: `Bearer ${token}`,};
+        const [targetResponse, recipesResponse] = await Promise.all([
+          axios.get("http://localhost:8000/target/me", {headers}),
+          axios.get("http://localhost:8000/recipes/", {headers}), ]);
 
-        setData(response.data);
+        
+        setData(targetResponse.data);
+        const shuffledRecipes = [...recipesResponse.data].sort(
+        () => Math.random() - 0.5
+        );
+
+        setRecipes(shuffledRecipes.slice(0, 4));
+
       } catch (error) {
         console.log("Error:", error);
         setError(
-          error.response?.data?.detail || "Could not load your nutrition targets"
+          error.response?.data?.detail || "Could not load your dashboard"
         );
       } finally {
         setLoading(false);
@@ -89,6 +100,7 @@ const HomePage = () => {
       {/* Micronutrients Section */}
       <section className="micro-section">
         <button
+          type="button"
           className="toggle-micro-btn"
           onClick={() => setShowMicronutrients((prev) => !prev)}
           aria-expanded={showMicronutrients}
@@ -139,6 +151,18 @@ const HomePage = () => {
           </div>
         )}
       </section>
+
+      <section className="recommendations-section">
+          <h2>Today's recommendations</h2>
+
+          {recipes.length === 0 ? (<p>No matching recipes were found.</p>) : (
+            <div className="recipes-container">
+                {recipes.map((recipe) => (
+                    <RecipeCard key={recipe.id} recipe={recipe} />
+                ))}
+            </div>
+          )}
+        </section>
     </div>
   );
 };
