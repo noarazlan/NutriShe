@@ -70,7 +70,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/tips",
-        element: <Tips />,
+        element: <TipsPage />,
       },
     ],
   },
