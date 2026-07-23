@@ -5,6 +5,7 @@ from routers.users import router as users_router
 from routers.target import router as target_router
 from routers.recipes import router as recipes_router
 from routers.favorites import router as favorites_router
+from routers.tips import router as tips_router
 
 
 app = FastAPI()
@@ -29,6 +30,7 @@ app.include_router(users_router)
 app.include_router(target_router)
 app.include_router(recipes_router)
 app.include_router(favorites_router)
+app.include_router(tips_router)
 
 @app.get("/")
 def root():

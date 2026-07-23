@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "../styles/home.css"; 
 import RecipeCard from "../components/RecipeCard";
+import HomeTips from "../components/HomeTips";
 
 const HomePage = () => {
   const [data, setData] = useState(null);
@@ -163,6 +164,7 @@ const HomePage = () => {
             </div>
           )}
         </section>
+        <HomeTips />
     </div>
   );
 };

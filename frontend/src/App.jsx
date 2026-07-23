@@ -20,6 +20,7 @@ import Carbohydrates from "./pages/Carbohydrates";
 import HomePage from "./pages/Home";
 import RecipesPage from "./pages/Recipes";
 import RecipeDetailsPage from "./pages/RecipeDetails";
+import TipsPage from "./pages/Tips";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
       {
          path: "/recipes/:id",
         element: <RecipeDetailsPage />,
+      },
+      {
+        path: "/tips",
+        element: <Tips />,
       },
     ],
   },

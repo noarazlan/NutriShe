@@ -49,8 +49,8 @@ function Navbar() {
 
         <div className="navbar-links">
           <Link to="/">Home</Link>
-
           <Link to="/recipes">Recipes</Link>
+          <Link to="/tips">Tips</Link>
 
 
           <button
